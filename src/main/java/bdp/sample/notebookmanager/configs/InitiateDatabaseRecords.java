@@ -17,7 +17,7 @@ class InitiateDatabaseRecords  {
     private static final Logger log = LoggerFactory.getLogger(InitiateDatabaseRecords.class);
 
 
-   @Bean
+    @Bean
     CommandLineRunner initDatabase(NoteBookRepository repository) {
         if(repository.findAll().size()<1) {
             return args -> {
@@ -29,7 +29,10 @@ class InitiateDatabaseRecords  {
                     repository.save(new NoteBook("Apple MacBook", 709.9));
                     repository.save(new NoteBook("LG D230", 299.9));
                     repository.save(new NoteBook("Acer P700", 199.9));
-
+                    repository.save(new NoteBook("Apple MacBook Air", 1199));
+                    repository.save(new NoteBook("Dell XPS 13", 1299));
+                    repository.save(new NoteBook("HP Spectre x360 14", 1399));
+                    repository.save(new NoteBook("Lenovo ThinkPad X1 Carbon", 1499));
                     log.info("Initial records inserted into database." );
                 } catch (Exception e) {
                     log.info("Error in initiating records into database." );

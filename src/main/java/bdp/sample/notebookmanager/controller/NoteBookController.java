@@ -1,6 +1,7 @@
 package bdp.sample.notebookmanager.controller;
 
 
+import bdp.sample.notebookmanager.dto.NoteBookDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -114,8 +115,8 @@ public class NoteBookController {
             @ApiResponse(responseCode = "409", description = "Duplicate notebook name",
                     content = @Content) })
     @PostMapping
-    public ResponseEntity<EntityModel<NoteBook>> createnotebook(@RequestBody NoteBook notebook){
-
+    public ResponseEntity<EntityModel<NoteBook>> createnotebook(@RequestBody  NoteBookDto createNote){
+        NoteBook notebook = createNote.toNoteBook();
         // Create and Save notebook in database
         NoteBook storednotebook = noteBookService.createnotebook(notebook);
 
@@ -148,10 +149,10 @@ public class NoteBookController {
             @ApiResponse(responseCode = "409", description = "Duplicate notebook name",
                     content = @Content) })
     @PatchMapping(value = "/{notebookId}", produces = { "application/json" })
-    public ResponseEntity<EntityModel<NoteBook>> updatenotebook(@Parameter(description = "id of notebook to be updated")  @PathVariable int notebookId, @Parameter(description = "notebook updated information")  @RequestBody NoteBook notebook){
-
+    public ResponseEntity<EntityModel<NoteBook>> updatenotebook( @PathVariable int notebookId, @RequestBody NoteBookDto notebookUpdate){
+        NoteBook notebook = notebookUpdate.toNoteBook();
         // Update notebook in the database
-        NoteBook storednotebook = noteBookService.updatenotebook(notebookId,notebook);
+        NoteBook storednotebook = noteBookService.updatenotebook(notebookId, notebook);
 
         // Check whether the notebook exist and is updated or not
         if(storednotebook!=null) {
@@ -192,13 +193,12 @@ public class NoteBookController {
 
 
 
+    // Handling exceptions related to user input
+    @ExceptionHandler({ MissingServletRequestParameterException.class, InvalidParameterException.class, MethodArgumentTypeMismatchException.class })
+    public ResponseEntity<String> handleUserInputException() {
 
-        // Handling exceptions related to user input
-        @ExceptionHandler({ MissingServletRequestParameterException.class, InvalidParameterException.class, MethodArgumentTypeMismatchException.class })
-        public ResponseEntity<String> handleUserInputException() {
-
-            return new ResponseEntity("Bad Request", HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity("Bad Request", HttpStatus.BAD_REQUEST);
+    }
 
     // Handling runtime exception
     @ExceptionHandler({ RuntimeException.class })
