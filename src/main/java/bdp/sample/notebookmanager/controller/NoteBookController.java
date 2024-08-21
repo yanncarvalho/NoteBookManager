@@ -155,10 +155,12 @@ public class NoteBookController {
         NoteBook storednotebook = noteBookService.updatenotebook(notebookId, notebook);
 
         // Check whether the notebook exist and is updated or not
-        if(storednotebook!=null) {
+        if(storednotebook!=null && storednotebook.getID() != null) {
             // selfLink to api that retrieves the notebook according to HATEOS
-            Link recordSelfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(NoteBookController.class)
-                    .getnotebookById(notebook.getID())).withSelfRel();
+
+            Link recordSelfLink = WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(NoteBookController.class).getnotebookById(storednotebook.getID())
+            ).withSelfRel();
             notebook.add(recordSelfLink);
             // Send updated notebook with 202 status code to client
             return new ResponseEntity(EntityModel.of(storednotebook), HttpStatus.ACCEPTED);

@@ -30,7 +30,7 @@ public class NoteBook extends RepresentationModel {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // id generate by the database native approach
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getID() {
         return ID;
     }
@@ -40,7 +40,7 @@ public class NoteBook extends RepresentationModel {
     }
 
     @Basic
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
